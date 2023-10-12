@@ -1,53 +1,56 @@
 package com.example.demo.service;
 
 import com.example.demo.exception.ParkingLotNotFoundException;
-import com.example.demo.repository.ParkingLotRepository;
+import com.example.demo.repository.MyParkingLotsRepository;
 import com.example.demo.model.ParkingLot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
 @EnableScheduling
 public class ParkingLotService {
-    private final ParkingLotRepository parkingLotRepository;
+    private final MyParkingLotsRepository parkingLotRepository;
 
     @Autowired
-    public ParkingLotService(ParkingLotRepository parkingLotRepository) {
+    public ParkingLotService(MyParkingLotsRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
     }
 
 
-    public ParkingLot addParkingLot(ParkingLot parkingLot) {
-        return parkingLotRepository.save(parkingLot);
+    public void addParkingLot(ParkingLot parkingLot) {
+        parkingLotRepository.save(parkingLot);
     }
 
     public List<ParkingLot> findAllParkingLots() {
-        return parkingLotRepository.findAll();
+        return parkingLotRepository.findAll().orElseThrow(
+                () -> new ParkingLotNotFoundException("There is no Parking lots!!")
+        );
     }
 
+    //TODO, Make it update.
     public ParkingLot updateParkingLot(ParkingLot parkingLot) {
-        return parkingLotRepository.save(parkingLot);
+        parkingLotRepository.save(parkingLot);
+        return parkingLot;
     }
 
-    public ParkingLot findParkingLotById(Long id) {
-        return parkingLotRepository.findParkingLotById(id)
-                .orElseThrow(() -> new ParkingLotNotFoundException("User by id " + id + " was not found"));
+    public ParkingLot findParkingLotById(String id) {
+        return parkingLotRepository.findByID(id).orElseThrow(
+                () -> new ParkingLotNotFoundException("User by id " + id + " was not found")
+        );
     }
 
-    public void deleteParkingLot(Long id) {
-        parkingLotRepository.deleteParkingLotById(id);
+    public void deleteParkingLot(String id) {
+        parkingLotRepository.deleteByID(id);
     }
 
     @Scheduled(cron = "0 0 * * * *")
-    public void schedule(){
-        try{
+    public void schedule() {
+        try {
             findAllParkingLots().stream().filter((parkingLot) ->
                     parkingLot.getExpirationDate() != null &&
                             (parkingLot.getExpirationDate().before(new Date()) ||
@@ -60,8 +63,7 @@ public class ParkingLotService {
                 parkingLot.setExpirationDate(null);
                 updateParkingLot(parkingLot);
             });
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

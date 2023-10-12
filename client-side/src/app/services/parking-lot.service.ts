@@ -21,7 +21,7 @@ export class ParkingLotService {
     return this.http.post<ParkingLot>(`${this.baseUrl}/parking-lot/add`, parkingLot);
   }
 
-  removeParkingLot(id: number): Observable<void> {
+  removeParkingLot(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/parking-lot/delete/${id}`);
   }
 
@@ -29,7 +29,7 @@ export class ParkingLotService {
     return this.http.put<ParkingLot>(`${this.baseUrl}/parking-lot/update`, assignmentData);
   }
 
-  getParkingLotById(id: number): Observable<ParkingLot> {
+  getParkingLotById(id: string): Observable<ParkingLot> {
     return this.http.get<ParkingLot>(`${this.baseUrl}/parking-lot/${id}`);
   }
 

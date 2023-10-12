@@ -103,7 +103,7 @@ export class AppComponent {
     );
   }
 
-  public onDeleteParkingLot(id: number): void {
+  public onDeleteParkingLot(id: string): void {
     this.service.removeParkingLot(id).subscribe((value)=>{
       console.log(value);
       this.getParkingLots();

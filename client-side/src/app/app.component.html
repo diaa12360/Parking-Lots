@@ -42,7 +42,6 @@
         </div>
         <ul class="list-group list-group-flush">
           <li *ngIf="tap;" class="list-group-item" id="assign-a-car" (click)="onOpenModal(parkingLot, 'assign')" style="align-content: center"><i class="fa fa-plus" aria-hidden="true"></i><i><a> Assign Car</a></i></li>
-<!--          <li class="list-group-item"><i class="fa fa-envelope float-right"></i>{{parkingLot?.name}}</li>-->
           <li *ngIf="!tap;" class="list-group-item"><i class="fa fa-user float-right"></i>Customer Name: {{parkingLot?.customerName}}</li>
           <li *ngIf="!tap;" class="list-group-item"><i class="fa fa-phone float-right"></i>Phone Number: {{parkingLot?.phoneNumber}}</li>
           <li *ngIf="!tap;" class="list-group-item"><i class="fa fa-car float-right"></i>Car Number: {{parkingLot?.carNumber}}</li>

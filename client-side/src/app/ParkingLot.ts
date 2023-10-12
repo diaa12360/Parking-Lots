@@ -1,5 +1,5 @@
 export interface ParkingLot{
-  id: number,
+  id: string,
   name: string,
   available: boolean,
   customerName?: string,
